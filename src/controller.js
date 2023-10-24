@@ -1,29 +1,29 @@
 import {pool} from './database.js';
 
-class PersonaController{
+class LibroController{
 
     async getAll(req, res) {
-        const [result] = await pool.query('SELECT * FROM personas');
+        const [result] = await pool.query('SELECT * FROM libros');
         res.json(result);
     }
 
     async add(req, res){
-        const persona = req.body;
-        const [result] = await pool.query(`INSERT INTO personas (nombre, autor, categoria, año_publicacion, ISBN) VALUES (?, ?, ?, ?, ?)`, [persona.nombre, persona.autor, persona.categoria, persona.año_publicacion, persona.ISBN]);
+        const libro = req.body;
+        const [result] = await pool.query(`INSERT INTO libros (nombre, autor, categoria, año_publicacion, ISBN) VALUES (?, ?, ?, ?, ?)`, [libro.nombre, libro.autor, libro.categoria, libro.año_publicacion, libro.ISBN]);
         res.json({"id insertado": result.insertId});
     }
 
     async delete(req, res){
-        const persona = req.body;
-        const [result] = await pool.query(`DELETE FROM Personas WHERE id=(?)`, [persona.id]);
+        const libro = req.body;
+        const [result] = await pool.query(`DELETE FROM libros WHERE id=(?)`, [libro.id]);
         res.json({"Registros eliminados": result.affectedRows});
     }
 
     async update(req, res){
-        const persona = req.body;
-        const [result] = await pool.query(`UPDATE Personas SET nombre=(?), autor=(?), categoria=(?), año_publicacion=(?), ISBN=(?) WHERE id=(?)`, [persona.nombre, persona.autor, persona.categoria, persona.año_publicacion, persona.ISBN, persona.id]);
+        const libro = req.body;
+        const [result] = await pool.query(`UPDATE libros SET nombre=(?), autor=(?), categoria=(?), año_publicacion=(?), ISBN=(?) WHERE id=(?)`, [libro.nombre, libro.autor, libro.categoria, libro.año_publicacion, libro.ISBN, libro.id]);
         res.json({"Registros actualizados": result.changedRows});
     }
 }
 
-export const persona = new PersonaController();
+export const libro = new LibroController();
