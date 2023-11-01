@@ -3,14 +3,24 @@ import {pool} from './database.js';
 class LibroController{
 
     async getAll(req, res) {
-        const [result] = await pool.query('SELECT * FROM libros');
-        res.json(result);
+        try {
+            const [result] = await pool.query('SELECT * FROM libros');
+            res.json(result);
+        } catch (error) {
+            console.log('ERROR: No se pudo obtener la lista:', error);
+            res.status(500).json({ error: 'No se pudo obtener la lista de libros' });
+        }
     }
 
     async getOne(req, res) {
-        const libro = req.body;
-        const [result] = await pool.query(`SELECT * FROM libros WHERE id = (?)`, [libroId]);
-        res.json(result);
+        const libroId = req.params.id; 
+        try {
+            const [result] = await pool.query('SELECT * FROM libros WHERE id = ?', [libroId]);
+            res.json(result);
+        } catch (error) {
+            console.log('ERROR: No se pudo obtener el libro por ID:', error);
+            res.status(500).json({ error: 'No se pudo obtener el libro por ID' });
+        }
     }
 
     async add(req, res){
@@ -35,10 +45,14 @@ class LibroController{
         
     }
 
-    async update(req, res){
+    async update(req, res) {
         const libro = req.body;
-        const [result] = await pool.query(`UPDATE libros SET nombre=(?), autor=(?), categoria=(?), año_publicacion=(?), ISBN=(?) WHERE id=(?)`, [libro.nombre, libro.autor, libro.categoria, libro.año_publicacion, libro.ISBN, libro.id]);
-        res.json({"Registros actualizados": result.changedRows});
+        try {
+            const [result] = await pool.query('UPDATE libros SET nombre = ?, autor = ?, categoria = ?, año_publicacion = ?, ISBN = ? WHERE id = ?', [libro.nombre, libro.autor, libro.categoria, libro.año_publicacion, libro.ISBN, libro.id]);
+            res.json({ "Registros actualizados": result.changedRows });
+        } catch (error) {
+            console.log('ERROR: No se pudo actualizar el libro:', error);
+        }
     }
 }
 
