@@ -1,59 +1,59 @@
 import {pool} from './database.js';
 
-class LibroController{
+class ProductoController{
 
     async getAll(req, res) {
         try {
-            const [result] = await pool.query('SELECT * FROM libros');
+            const [result] = await pool.query('SELECT * FROM productos');
             res.json(result);
         } catch (error) {
             console.log('ERROR: No se pudo obtener la lista:', error);
-            res.status(500).json({ error: 'No se pudo obtener la lista de libros' });
+            res.status(500).json({ error: 'No se pudo obtener la lista de productos' });
         }
     }
 
     async getOne(req, res) {
-        const libroId = req.params.id; 
+        const productoId = req.params.id; 
         try {
-            const [result] = await pool.query('SELECT * FROM libros WHERE id = ?', [libroId]);
+            const [result] = await pool.query('SELECT * FROM productos WHERE id = ?', [productoId]);
             res.json(result);
         } catch (error) {
-            console.log('ERROR: No se pudo obtener el libro por ID:', error);
-            res.status(500).json({ error: 'No se pudo obtener el libro por ID' });
+            console.log('ERROR: No se pudo obtener el producto por ID:', error);
+            res.status(500).json({ error: 'No se pudo obtener el producto por ID' });
         }
     }
 
     async add(req, res){
-        const libro = req.body;
+        const producto = req.body;
         try {
-            const [result] = await pool.query(`INSERT INTO libros (nombre, autor, categoria, año_publicacion, ISBN) VALUES (?, ?, ?, ?, ?)`, [libro.nombre, libro.autor, libro.categoria, libro.año_publicacion, libro.ISBN]);
+            const [result] = await pool.query(`INSERT INTO productos (nombre, tipo, marca) VALUES (?, ?, ?)`, [producto.nombre, producto.categoria, producto.marca]);
         res.json({"id insertado": result.insertId});
         }catch (error){
-            console.log ('ERROR: El libro no pudo ser agregado:', error);
+            console.log ('ERROR: El producto no pudo ser agregado:', error);
         }
         
     }
 
     async delete(req, res){
-        const libro = req.body;
+        const producto = req.body;
         try {
-            const [result] = await pool.query(`DELETE FROM libros WHERE ISBN=(?)`, [libro.ISBN]);
-        res.json({"Registros eliminados por ISBN": result.affectedRows});
+            const [result] = await pool.query(`DELETE FROM productos WHERE id=(?)`, [producto.id]);
+        res.json({"Registros eliminados por id": result.affectedRows});
         }catch (error){
-            console.log ('ERROR: No se pudo eliminar libro por ISBN:', error);
+            console.log ('ERROR: No se pudo eliminar libro por id:', error);
         }
         
     }
 
     async update(req, res) {
-        const libro = req.body;
+        const producto = req.body;
         try {
-            const [result] = await pool.query('UPDATE libros SET nombre = ?, autor = ?, categoria = ?, año_publicacion = ?, ISBN = ? WHERE id = ?', [libro.nombre, libro.autor, libro.categoria, libro.año_publicacion, libro.ISBN, libro.id]);
+            const [result] = await pool.query('UPDATE productos SET nombre = ?, categoria = ?, marca = ? WHERE id = ?', [libro.nombre, libro.categoria, libro.marca, libro.id]);
             res.json({ "Registros actualizados": result.changedRows });
         } catch (error) {
-            console.log('ERROR: No se pudo actualizar el libro:', error);
+            console.log('ERROR: No se pudo actualizar el producto:', error);
         }
     }
 }
 
-export const libro = new LibroController();
+export const producto = new ProductoController();
