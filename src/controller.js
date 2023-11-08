@@ -48,7 +48,7 @@ class ProductoController{
     async update(req, res) {
         const producto = req.body;
         try {
-            const [result] = await pool.query('UPDATE productos SET nombre = ?, categoria = ?, marca = ? WHERE id = ?', [libro.nombre, libro.categoria, libro.marca, libro.id]);
+            const [result] = await pool.query('UPDATE productos SET nombre = ?, categoria = ?, marca = ? WHERE id = ?', [producto.nombre, producto.categoria, producto.marca, producto.id]);
             res.json({ "Registros actualizados": result.changedRows });
         } catch (error) {
             console.log('ERROR: No se pudo actualizar el producto:', error);
