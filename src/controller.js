@@ -26,7 +26,7 @@ class ProductoController{
     async add(req, res){
         const producto = req.body;
         try {
-            const [result] = await pool.query(`INSERT INTO productos (nombre, tipo, marca) VALUES (?, ?, ?)`, [producto.nombre, producto.categoria, producto.marca]);
+            const [result] = await pool.query(`INSERT INTO productos (nombre, categoria, marca) VALUES (?, ?, ?)`, [producto.nombre, producto.categoria, producto.marca]);
         res.json({"id insertado": result.insertId});
         }catch (error){
             console.log ('ERROR: El producto no pudo ser agregado:', error);
