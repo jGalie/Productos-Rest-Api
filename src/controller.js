@@ -40,7 +40,7 @@ class ProductoController{
             const [result] = await pool.query(`DELETE FROM productos WHERE id=(?)`, [producto.id]);
         res.json({"Registros eliminados por id": result.affectedRows});
         }catch (error){
-            console.log ('ERROR: No se pudo eliminar libro por id:', error);
+            console.log ('ERROR: No se pudo eliminar producto por id:', error);
         }
         
     }
